@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Email:etc/email_templates.xsd">
+    <template id="selectco_s200_api_notification_access_token_failed" label="Failed Getting Access Token Email Template"
+              file="access_token_failed.html" type="html" module="SelectCo_Sage200Api" area="adminhtml" />
+    <template id="selectco_s200_api_notification_refresh_token_expiring" label="Expiring Refresh Token Email Template"
+              file="refresh_token_expiring.html" type="html" module="SelectCo_Sage200Api" area="adminhtml" />
+</config>

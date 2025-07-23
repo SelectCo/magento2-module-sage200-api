@@ -1,0 +1,17 @@
+<!--@subject {{trans "Failed Getting Sage200 Access Token"}} @-->
+<!--@vars {
+"var error.message": "Error Message",
+} @-->
+{{template config_path="design/email/header_template"}}
+
+
+<p>
+    {{trans 'There was an issue while trying to obtain an access token.'}}
+</p>
+
+{{if error.message}}
+<p>
+    <strong>{{trans '%error_message' error_message=$error.message}}</strong>
+</p>
+{{/if}}
+{{template config_path="design/email/footer_template"}}

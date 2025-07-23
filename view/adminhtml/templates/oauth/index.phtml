@@ -1,0 +1,52 @@
+<?php
+
+use SelectCo\Sage200Api\Block\Adminhtml\OAuth\Token;
+
+/** @var Token $block */
+?>
+<div class="page-main-actions">
+    <div class="page-actions" data-ui-id="page-actions-toolbar-content-header">
+        <div class="page-actions-inner" data-title="Sage200 OAuth Token">
+            <div class="page-actions-buttons">
+                <button id="refresh" title="Refresh Token" type="button" class="action- scalable action-secondary"
+                        onclick="location.href = '<?= $block->getTokenRefreshUrl(); ?>';" data-ui-id="refreshtoken-button">
+                    <span>Refresh Token</span>
+                </button>
+                <button id="get" title="Get New Token" type="button" class="action- scalable primary"
+                        onclick="location.href = '<?= $block->getNewTokenUrl(); ?>';" data-ui-id="get-button">
+                    <span>Get New Token</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<table>
+    <tr>
+        <th>Is Token Saved</th>
+        <td><?php echo $block->isTokenSet() ? 'True' : 'False'; ?></td>
+    </tr>
+    <tr>
+        <th>Access Token Expiry</th>
+        <td><?= $block->getAccessTokenExpiry(); ?></td>
+    </tr>
+    <tr>
+        <th>Refresh Token Expiry</th>
+        <td><?= $block->getRefreshTokenExpiry(); ?></td>
+    </tr>
+</table>
+<br>
+<?php if ($block->isTokenSet() && !$block->isTokenExpired()) { ?>
+    <table>
+        <tr>
+            <td><strong>Available Companies</strong></td>
+        </tr>
+        <?php foreach ($block->getAvailableSites() as $site) { ?>
+            <tr>
+                <td><?= $site['company_id'] ?></td>
+                <td>  </td>
+                <td><?= $site['company_name'] ?></td>
+            </tr>
+        <?php } ?>
+    </table>
+<?php } ?>

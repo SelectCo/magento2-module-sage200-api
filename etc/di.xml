@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="selectco_sage200api_check_access_token" xsi:type="object">SelectCo\Sage200Api\Console\Command\CheckAccessToken</item>
+                <item name="selectco_sage200api_refresh_access_token" xsi:type="object">SelectCo\Sage200Api\Console\Command\RefreshAccessToken</item>
+            </argument>
+            <argument name="sensitive" xsi:type="array">
+                <item name="selectco_s200_api/api_config/client_id" xsi:type="string">1</item>
+                <item name="selectco_s200_api/api_config/client_secret" xsi:type="string">1</item>
+                <item name="selectco_s200_api/api_config/developer_subscription_key" xsi:type="string">1</item>
+                <item name="selectco_s200_api/api_config/x_site_id" xsi:type="string">1</item>
+                <item name="selectco_s200_api/token/access_token" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

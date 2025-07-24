@@ -16,7 +16,7 @@ class Bootstrap
     const AUTHORIZATION_SERVER_ACCESS_TOKEN_URL = 'selectco_s200_api/api_config/token_url';
     const AUTHORIZATION_SERVER_RESOURCE_OWNER_URL = 'selectco_s200_api/api_config/resource_owner_url';
     const OAUTH_REFRESH_TOKEN_LIFETIME = 'selectco_s200_api/api_config/refresh_token_lifetime';
-    const OAUTH_SCOPE_ACCESS = 'openid profile email offline_access';
+    const OAUTH_SCOPE_ACCESS = 'selectco_s200_api/api_config/scope_access';
     const OAUTH_ACCESS_TOKEN = 'selectco_s200_api/token/access_token';
     const OAUTH_REFRESH_TOKEN_EXPIRY = 'selectco_s200_api/token/refresh_token_expiry';
     const CLIENT_REDIRECT_URI = 's200/oauth/callback';

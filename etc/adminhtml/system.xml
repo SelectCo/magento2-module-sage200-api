@@ -55,6 +55,7 @@
                 </field>
                 <field id="scope_access" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Scope Access</label>
+                    <tooltip>A space-separated list of scopes. For relevant access pass the following “openid profile email offline_access”.</tooltip>
                 </field>
                 <field id="refresh_token_lifetime" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Refresh Token Lifetime</label>

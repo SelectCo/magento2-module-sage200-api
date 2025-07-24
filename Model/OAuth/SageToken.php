@@ -116,7 +116,13 @@ class SageToken extends Bootstrap
     public function saveAccessToken(AccessToken $token): void
     {
         $this->helper->setConfigValue(self::OAUTH_ACCESS_TOKEN, $this->_encryptor->encrypt(json_encode($token->jsonSerialize())));
-        $this->saveRefreshTokenExpiry($this->helper->getConfigValue(self::OAUTH_REFRESH_TOKEN_LIFETIME));
+
+        if ($token->getRefreshToken() === null) {
+            $this->saveRefreshTokenExpiry('REFRESH TOKEN NOT SET');
+        } else {
+            $this->saveRefreshTokenExpiry($this->helper->getConfigValue(self::OAUTH_REFRESH_TOKEN_LIFETIME));
+        }
+
         $this->helper->clearConfigCache();
     }
 
@@ -138,7 +144,7 @@ class SageToken extends Bootstrap
      */
     public function refreshToken(): bool
     {
-        if ($this->getAccessToken()) {
+        if ($this->getAccessToken() && $this->getRefreshToken() !== null) {
             if ($this->getAccessToken()->hasExpired()) {
                 $provider = $this->provider->getProvider();
 
@@ -183,8 +189,8 @@ class SageToken extends Bootstrap
      */
     public function checkRefreshTokenExpiry()
     {
-        $tokenExpiry = (int)$this->helper->getConfigValue(self::OAUTH_REFRESH_TOKEN_EXPIRY);
-        if ($tokenExpiry < time()) {
+        $tokenExpiry = $this->helper->getConfigValue(self::OAUTH_REFRESH_TOKEN_EXPIRY);
+        if ($this->getRefreshToken() === null || (int)$tokenExpiry < time()) {
             return false;
         }
 

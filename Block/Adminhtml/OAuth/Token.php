@@ -60,6 +60,9 @@ class Token extends Template
         if ($token) {
             return 'Token expires in ' . $token['secondsToExpire'] . ' seconds at ' . $token['expiryDate'];
         }
+        if ($this->sageToken->getRefreshToken() === null) {
+            return 'Refresh token has not been set';
+        }
         return 'Token has already expired!';
     }
 

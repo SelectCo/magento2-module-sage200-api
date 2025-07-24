@@ -195,8 +195,8 @@ class SageToken extends Bootstrap
         }
 
         return [
-            'secondsToExpire' => $tokenExpiry - time(),
-            'expiryDate' => date('d/m/Y H:i:s', $tokenExpiry)
+            'secondsToExpire' => (int)$tokenExpiry - time(),
+            'expiryDate' => date('d/m/Y H:i:s', (int)$tokenExpiry)
         ];
     }
 }

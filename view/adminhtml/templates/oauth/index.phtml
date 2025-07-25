@@ -3,6 +3,11 @@
 use SelectCo\Sage200Api\Block\Adminhtml\OAuth\Token;
 
 /** @var Token $block */
+
+if (!$block->isModuleEnabled()) {
+    echo '<h1>Module is not enabled</h1>';
+    return;
+}
 ?>
 <div class="page-main-actions">
     <div class="page-actions" data-ui-id="page-actions-toolbar-content-header">

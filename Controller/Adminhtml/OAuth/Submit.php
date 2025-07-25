@@ -7,7 +7,7 @@ use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NotFoundException;
-use SelectCo\Core\Helper\Data as ConfigHelper;
+use SelectCo\Sage200Api\Helper\Data;
 use SelectCo\Sage200Api\Model\OAuth\Provider;
 
 class Submit extends Action
@@ -15,26 +15,24 @@ class Submit extends Action
     const ADMIN_RESOURCE = 'SelectCo_Sage200Api::refresh_token';
 
     /**
+     * @var Data
+     */
+    private $helper;
+    /**
      * @var Provider
      */
     private $provider;
-
     /**
      * @var ResultFactory
      */
     protected $resultFactory;
 
-    /**
-     * @var ConfigHelper
-     */
-    private $helper;
-
-    public function __construct(Provider $provider, ResultFactory $resultFactory, ConfigHelper $helper, Context $context)
+    public function __construct(Data $helper, Provider $provider, ResultFactory $resultFactory, Context $context)
     {
         parent::__construct($context);
+        $this->helper = $helper;
         $this->provider = $provider;
         $this->resultFactory = $resultFactory;
-        $this->helper = $helper;
     }
 
     /**

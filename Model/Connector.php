@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace SelectCo\Sage200Api\Model;
 
-use SelectCo\Core\Helper\Data as ConfigHelper;
+use SelectCo\Sage200Api\Helper\Data;
 use SelectCo\Sage200Api\Model\OAuth\Bootstrap;
 use SelectCo\Sage200Api\Model\OAuth\SageToken;
 
@@ -14,7 +14,7 @@ class Connector extends Bootstrap
      */
     private $sageToken;
 
-    public function __construct(SageToken $sageToken, ConfigHelper $data)
+    public function __construct(SageToken $sageToken, Data $data)
     {
         parent::__construct($data);
         $this->sageToken = $sageToken;

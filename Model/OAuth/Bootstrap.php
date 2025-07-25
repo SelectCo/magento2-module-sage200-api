@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace SelectCo\Sage200Api\Model\OAuth;
 
-use SelectCo\Core\Helper\Data as CoreHelper;
+use SelectCo\Sage200Api\Helper\Data;
 
 class Bootstrap
 {
@@ -22,11 +22,11 @@ class Bootstrap
     const CLIENT_REDIRECT_URI = 's200/oauth/callback';
 
     /**
-     * @var CoreHelper
+     * @var Data
      */
     protected $helper;
 
-    public function __construct(CoreHelper $data)
+    public function __construct(Data $data)
     {
         $this->helper = $data;
     }

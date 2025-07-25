@@ -5,7 +5,7 @@ namespace SelectCo\Sage200Api\Model\OAuth;
 
 use League\OAuth2\Client\Provider\GenericProvider;
 use Magento\Backend\Model\UrlInterface;
-use SelectCo\Core\Helper\Data as CoreHelper;
+use SelectCo\Sage200Api\Helper\Data;
 
 class Provider extends Bootstrap
 {
@@ -14,7 +14,7 @@ class Provider extends Bootstrap
      */
     private $urlInterface;
 
-    public function __construct(CoreHelper $data, UrlInterface $urlInterface)
+    public function __construct(Data $data, UrlInterface $urlInterface)
     {
         parent::__construct($data);
         $this->urlInterface = $urlInterface;

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace SelectCo\Sage200Api\Console\Command;
 
+use SelectCo\Sage200Api\Helper\Data;
 use SelectCo\Sage200Api\Model\OAuth\SageToken;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -14,10 +15,15 @@ class RefreshAccessToken extends Command
      * @var SageToken
      */
     private $sageToken;
+    /**
+     * @var Data
+     */
+    private $helper;
 
-    public function __construct(SageToken $sageToken)
+    public function __construct(SageToken $sageToken, Data $helper)
     {
         $this->sageToken = $sageToken;
+        $this->helper = $helper;
         parent::__construct();
     }
 

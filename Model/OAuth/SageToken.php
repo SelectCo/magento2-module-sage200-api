@@ -7,7 +7,7 @@ use InvalidArgumentException;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Token\AccessToken;
 use Magento\Framework\Encryption\EncryptorInterface;
-use SelectCo\Core\Helper\Data as ConfigHelper;
+use SelectCo\Sage200Api\Helper\Data;
 
 class SageToken extends Bootstrap
 {
@@ -26,11 +26,11 @@ class SageToken extends Bootstrap
     private $_encryptor;
 
     /**
-     * @param ConfigHelper $data
+     * @param Data $data
      * @param Provider $provider
      * @param EncryptorInterface $encryptor
      */
-    public function __construct(ConfigHelper $data, Provider $provider, EncryptorInterface $encryptor)
+    public function __construct(Data $data, Provider $provider, EncryptorInterface $encryptor)
     {
         $this->provider = $provider;
         $this->_encryptor = $encryptor;

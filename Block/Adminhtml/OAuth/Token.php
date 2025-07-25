@@ -5,11 +5,16 @@ namespace SelectCo\Sage200Api\Block\Adminhtml\OAuth;
 
 use Magento\Backend\Block\Template;
 use Magento\Backend\Model\UrlInterface;
+use SelectCo\Sage200Api\Helper\Data;
 use SelectCo\Sage200Api\Model\Connector;
 use SelectCo\Sage200Api\Model\OAuth\SageToken;
 
 class Token extends Template
 {
+    /**
+     * @var Data
+     */
+    private $helper;
     /**
      * @var SageToken
      */
@@ -24,6 +29,7 @@ class Token extends Template
     private $connector;
 
     public function __construct(
+        Data $helper,
         SageToken $sageToken,
         UrlInterface $urlInterface,
         Template\Context $context,
@@ -32,6 +38,7 @@ class Token extends Template
     )
     {
         parent::__construct($context, $data);
+        $this->helper = $helper;
         $this->sageToken = $sageToken;
         $this->urlInterface = $urlInterface;
         $this->connector = $connector;

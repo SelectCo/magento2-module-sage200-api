@@ -49,6 +49,11 @@ class RefreshAccessToken extends Command
     {
         $exitCode = 0;
 
+        if (!$this->helper->isModuleEnabled()) {
+            $output->writeln('<error>Module is not enabled!</error>');
+            return $exitCode;
+        }
+
         if ($this->sageToken->refreshToken()) {
             $output->writeln('<info>Access token was refreshed successfully!</info>');
         } else {

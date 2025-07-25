@@ -30,7 +30,9 @@ class Refresh extends Action
 
     public function execute()
     {
-        $this->token->refreshToken();
+        if ($this->helper->isModuleEnabled()) {
+            $this->token->refreshToken();
+        }
         return $this->resultRedirectFactory->create()->setPath('s200/oauth/');
     }
 }

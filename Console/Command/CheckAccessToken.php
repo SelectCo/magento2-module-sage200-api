@@ -49,6 +49,11 @@ class CheckAccessToken extends Command
     {
         $exitCode = 0;
 
+        if (!$this->helper->isModuleEnabled()) {
+            $output->writeln('<error>Module is not enabled!</error>');
+            return $exitCode;
+        }
+
         $result = $this->sageToken->checkAccessTokenExpiry();
         if (!$result) {
             $output->writeln('<error>Access token has expired!</error>');

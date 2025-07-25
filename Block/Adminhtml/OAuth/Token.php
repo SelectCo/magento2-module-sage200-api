@@ -44,6 +44,11 @@ class Token extends Template
         $this->connector = $connector;
     }
 
+    public function isModuleEnabled(): bool
+    {
+        return $this->helper->isModuleEnabled();
+    }
+
     public function isTokenSet(): bool
     {
         if ($this->sageToken->getAccessToken()) {

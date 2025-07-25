@@ -29,7 +29,8 @@ class Connector extends Bootstrap
      */
     public function send(string $endpoint, string $method, ?string $queryParam = null, ?string $sage200xCompany = null): ?string
     {
-        if (!$this->checkStatus() || !in_array($method, ['POST', 'GET', 'DEL', 'PUT', 'PATCH', 'DELETE']))
+        $methods = ['POST', 'GET', 'DEL', 'PUT', 'PATCH', 'DELETE'];
+        if (!$this->helper->isModuleEnabled() || !$this->checkStatus() || !in_array($method, $methods))
         {
             return null;
         }

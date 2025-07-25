@@ -59,7 +59,7 @@ class CheckAccessToken extends Command
             $output->writeln('<error>Access token has expired!</error>');
             $exitCode = 1;
         } else {
-            $output->writeln("<info>Access token expires in {$result['secondsToExpire']} seconds, at {$result['expiryDate']} </info>");
+            $output->writeln("<info>Access token expires in " . round($result['hoursToExpire'], 2) . " hours, at {$result['expiryDate']} </info>");
         }
 
         $result = $this->sageToken->checkRefreshTokenExpiry();
@@ -67,7 +67,7 @@ class CheckAccessToken extends Command
             $output->writeln('<error>Refresh token has expired!</error>');
             $exitCode = 1;
         } else {
-            $output->writeln("<info>Refresh token expires in {$result['secondsToExpire']} seconds, at {$result['expiryDate']} </info>");
+            $output->writeln("<info>Refresh token expires in " . round($result['daysToExpire'], 2) . " days, at {$result['expiryDate']} </info>");
         }
 
         return $exitCode;

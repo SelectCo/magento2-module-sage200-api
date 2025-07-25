@@ -61,7 +61,7 @@ class Token extends Template
     {
         $token = $this->sageToken->checkAccessTokenExpiry();
         if ($token) {
-            return 'Token expires in ' . $token['secondsToExpire'] . ' seconds at ' . $token['expiryDate'];
+            return 'Token expires in ' . round($token['hoursToExpire'],2) . ' hours at ' . $token['expiryDate'];
         }
         return 'Token has already expired!';
     }
@@ -70,7 +70,7 @@ class Token extends Template
     {
         $token = $this->sageToken->checkRefreshTokenExpiry();
         if ($token) {
-            return 'Token expires in ' . $token['secondsToExpire'] . ' seconds at ' . $token['expiryDate'];
+            return 'Token expires in ' . round($token['daysToExpire'],1) . ' days at ' . $token['expiryDate'];
         }
         if ($this->sageToken->getRefreshToken() === null) {
             return 'Refresh token has not been set';
@@ -95,6 +95,11 @@ class Token extends Template
 
     public function getAvailableSites(): array
     {
-        return json_decode($this->connector->send('sites', 'GET'), true);
+        $results = json_decode($this->connector->send('sites', 'GET'), true);
+        if (array_key_exists('statusCode', $results)) {
+            return [];
+        }
+
+        return $results;
     }
 }

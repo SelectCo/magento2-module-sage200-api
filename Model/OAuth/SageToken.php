@@ -177,7 +177,8 @@ class SageToken extends Bootstrap
         }
 
         return [
-            'secondsToExpire' => $this->getAccessToken()->getExpires() - time(),
+            'minutesToExpire' => ($this->getAccessToken()->getExpires() - time()) / 60,
+            'hoursToExpire' => ($this->getAccessToken()->getExpires() - time()) / 60 / 60,
             'expiryDate' => date('d/m/Y H:i:s', $this->getAccessToken()->getExpires())
         ];
     }
@@ -195,7 +196,9 @@ class SageToken extends Bootstrap
         }
 
         return [
-            'secondsToExpire' => (int)$tokenExpiry - time(),
+            'minutesToExpire' => ((int)$tokenExpiry - time()) / 60,
+            'hoursToExpire' => ((int)$tokenExpiry - time()) / 60 / 60,
+            'daysToExpire' => ((int)$tokenExpiry - time()) / 60 / 60 / 24,
             'expiryDate' => date('d/m/Y H:i:s', (int)$tokenExpiry)
         ];
     }

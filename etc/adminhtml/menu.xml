@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="SelectCo_Sage200Api::view_token" sortOrder="100" title="Sage200 Token Management"
+             module="SelectCo_Sage200Api" parent="Magento_Backend::system_other_settings"
+             resource="SelectCo_Sage200Api::view_token" translate="title" action="s200/oauth/index"/>
+    </menu>
+</config>

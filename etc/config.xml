@@ -10,18 +10,21 @@
             <api_config>
                 <client_id backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <client_secret backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
-                <refresh_token_lifetime>90</refresh_token_lifetime>
                 <developer_subscription_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <x_site_id backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <auth_url>https://id.sage.com/authorize</auth_url>
                 <token_url>https://id.sage.com/oauth/token</token_url>
                 <resource_owner_url>https://api.columbus.sage.com/uk/sage200extra/accounts/</resource_owner_url>
                 <scope_access>openid profile email offline_access</scope_access>
+                <refresh_token_lifetime>90</refresh_token_lifetime>
             </api_config>
             <token>
                 <access_token backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <pause_failed_notification>false</pause_failed_notification>
+                <refresh_token_expiry_days>10</refresh_token_expiry_days>
             </token>
             <notification>
+                <enabled>false</enabled>
                 <access_token_failed>selectco_s200_api_templates_access_token_failed</access_token_failed>
                 <refresh_token_expiring>selectco_s200_api_templates_refresh_token_expiring</refresh_token_expiring>
             </notification>

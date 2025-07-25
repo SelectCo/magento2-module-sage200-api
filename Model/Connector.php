@@ -34,12 +34,14 @@ class Connector extends Bootstrap
         {
             return null;
         }
+
         $curlHeaders = array(
             'ocp-apim-subscription-key: ' . $this->helper->getConfigValue(self::OAUTH_DEVELOPER_SUBSCRIPTION_KEY),
             'Content-Type: application/json',
             'X-Site: ' . $this->helper->getConfigValue(self::OAUTH_X_SITE_ID),
             'Authorization: Bearer ' . $this->sageToken->getToken()
         );
+
         if ($sage200xCompany !== null) {
             $curlHeaders[] = 'X-Company: ' . $sage200xCompany;
         } elseif ($xCompany = $this->helper->getConfigValue(self::SAGE200_X_COMPANY_ID)) {

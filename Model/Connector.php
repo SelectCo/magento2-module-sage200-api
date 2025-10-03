@@ -54,7 +54,7 @@ class Connector extends Bootstrap
 
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => $this->helper->getBaseUrl() . $endpoint,
+            CURLOPT_URL => str_replace(' ', '%20', $this->helper->getBaseUrl() . $endpoint),
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,

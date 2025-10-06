@@ -51,6 +51,11 @@ class SageToken extends Bootstrap
             ]);
 
             $this->saveAccessToken($accessToken);
+            if ($accessToken->getRefreshToken() === null) {
+                $this->saveRefreshTokenExpiry('REFRESH TOKEN NOT SET');
+            } else {
+                $this->saveRefreshTokenExpiry($this->helper->getConfigValue(self::OAUTH_REFRESH_TOKEN_LIFETIME));
+            }
         } catch (IdentityProviderException $e) {
             //TODO - ADD LOGGING
             if ($e->getMessage() === 'invalid_grant') {
@@ -58,6 +63,7 @@ class SageToken extends Bootstrap
             }
             var_dump($e->getMessage());
         }
+        $this->helper->clearConfigCache();
     }
 
     /**
@@ -116,14 +122,6 @@ class SageToken extends Bootstrap
     public function saveAccessToken(AccessToken $token): void
     {
         $this->helper->setConfigValue(self::OAUTH_ACCESS_TOKEN, $this->_encryptor->encrypt(json_encode($token->jsonSerialize())));
-
-        if ($token->getRefreshToken() === null) {
-            $this->saveRefreshTokenExpiry('REFRESH TOKEN NOT SET');
-        } else {
-            $this->saveRefreshTokenExpiry($this->helper->getConfigValue(self::OAUTH_REFRESH_TOKEN_LIFETIME));
-        }
-
-        $this->helper->clearConfigCache();
     }
 
     /**

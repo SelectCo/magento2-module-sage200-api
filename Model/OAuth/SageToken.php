@@ -143,7 +143,7 @@ class SageToken extends Bootstrap
     public function refreshToken(): bool
     {
         if ($this->getAccessToken() && $this->getRefreshToken() !== null) {
-            if ($this->getAccessToken()->hasExpired()) {
+            if (!$this->getAccessToken()->hasExpired() && $this->getAccessToken()->getExpires() < 1800) {
                 $provider = $this->provider->getProvider();
 
                 try {

@@ -20,6 +20,7 @@ class Data extends CoreHelper
      */
     const PAUSE_TOKEN_FAILED_NOTIFICATION_CONFIG = 'selectco_s200_api/token/pause_failed_notification';
     const REFRESH_TOKEN_EXPIRY_DAYS_CONFIG = 'selectco_s200_api/token/refresh_token_expiry_days';
+    const ACCESS_TOKEN_EXPIRY_SECONDS_CONFIG = 'selectco_s200_api/token/access_token_refresh_seconds';
 
     /**
      * Notification Group
@@ -82,6 +83,16 @@ class Data extends CoreHelper
     public function getRefreshTokenDaysExpiry(): ?int
     {
         return (int)$this->getConfigValue(self::REFRESH_TOKEN_EXPIRY_DAYS_CONFIG);
+    }
+
+    /**
+     * Get the number of seconds to check before the access token expires
+     *
+     * @return int|null
+     */
+    public function getAccessTokenExpirySeconds(): ?int
+    {
+        return (int)$this->getConfigValue(self::ACCESS_TOKEN_EXPIRY_SECONDS_CONFIG);
     }
 
     /**

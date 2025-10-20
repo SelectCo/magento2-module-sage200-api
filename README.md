@@ -122,3 +122,9 @@ Please see [CHANGELOG](CHANGELOG) for more information on what has changed recen
 ## Resources
 
 [Sage 200 API Documentation](https://developer.sage.com/200/reference/)
+
+## License
+MIT. See LICENSE.
+
+## Support
+If you have a feature request or spotted a bug or a technical problem, create a GitHub issue.

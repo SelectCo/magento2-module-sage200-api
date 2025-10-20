@@ -51,7 +51,7 @@ class Token
             return;
         }
 
-        if ($accessToken->hasExpired() || $accessToken->getExpires() < 1800) {
+        if (!$accessToken->hasExpired() && $accessToken->getExpires() < $this->helper->getAccessTokenExpirySeconds()) {
             $this->sageToken->refreshToken();
         }
     }

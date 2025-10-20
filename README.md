@@ -14,7 +14,7 @@ An unofficial API client to interact with the Sage200 API.
     - Sage200 API setup and configured.
     - Developer subscription key
     - Client ID & Client Secret
-- Magento 2
+- Magento 2 (tested with 2.3.5)
 - PHP ^7.3
 
 
@@ -28,9 +28,7 @@ e.g. ```https://shop.example.com/admin_5fj7t/s200/oauth/callback```
 
 ## Authentication
 
-This client does not provide any authenticating methods.
-The connector is expecting a bearer token which is used to authenticate requests.
-The bearer token along with the subscription key must be passed to the connector on initialization.
+This client uses league/oauth2-client for authentication using the Authorization Code Grant and credentials provided in Admin configuration.
 
 For more information, please refer to the official [Sage200 API Documentation](https://developer.sage.com/200/api/).
 
@@ -39,16 +37,18 @@ For more information, please refer to the official [Sage200 API Documentation](h
 
 Add GitHub repo to your composer.json repositories.
 ```json
-"repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/SelectCo/magento2-module-sage200-api.git"
-        }
-    ]
+{
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/SelectCo/magento2-module-sage200-api.git"
+    }
+  ]
+}
 ```
 Require package with composer.
 ```shell
-composer require select-co\module-sage200-api
+composer require select-co/module-sage200-api
 ```
 
 
@@ -75,6 +75,23 @@ Token management is done through Admin => System => Other Settings => Sage200 To
 
 Details of a valid token are displayed here with available companies.
 
+
+## CLI/Console Commands
+
+- sage200:token:check
+  - Checks whether the current access token and refresh token are valid and reports time to expiry.
+  - Usage: bin/magento sage200:token:check
+
+- sage200:token:refresh
+  - Tries to refresh the access token using the stored refresh token and outputs new expiry times.
+  - Usage: bin/magento sage200:token:refresh
+
+## Cron
+
+- The module includes a scheduled job that:
+  - Refreshes the access token automatically when it has less than 30 minutes remaining.  This can be changed in the Admin configuration.
+  - Sends email notifications when the access token is missing/expired or the refresh token is nearing expiry, according to Admin configuration.
+- Ensure Magento cron is configured on your environment.
 
 ## Usage
 ```php

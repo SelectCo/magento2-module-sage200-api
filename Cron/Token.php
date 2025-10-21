@@ -54,6 +54,12 @@ class Token
         if (!$accessToken->hasExpired() && $accessToken->getExpires() < $this->helper->getAccessTokenExpirySeconds()) {
             $this->sageToken->refreshToken();
         }
+
+        if ($accessToken->hasExpired()) {
+            if (!$this->helper->isTokenFailedNotificationsPaused() && $this->helper->isNotificationsEnabled()) {
+                $this->email->send($this->helper->getAccessTokenFailedTemplate());
+            }
+        }
     }
 
     /**

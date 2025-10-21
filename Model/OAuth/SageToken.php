@@ -143,20 +143,18 @@ class SageToken extends Bootstrap
     public function refreshToken(): bool
     {
         if ($this->getAccessToken() && $this->getRefreshToken() !== null) {
-            if (!$this->getAccessToken()->hasExpired() && $this->getAccessToken()->getExpires() < 1800) {
-                $provider = $this->provider->getProvider();
+            $provider = $this->provider->getProvider();
 
-                try {
-                    $newAccessToken = $provider->getAccessToken('refresh_token', [
-                        'refresh_token' => $this->getRefreshToken()
-                    ]);
-                    $this->saveAccessToken($newAccessToken);
-                    $this->helper->clearConfigCache();
-                } catch (IdentityProviderException $e) {
-                    //TODO - Notify user there was an error
-                    var_dump($e->getMessage());
-                    return false;
-                }
+            try {
+                $newAccessToken = $provider->getAccessToken('refresh_token', [
+                    'refresh_token' => $this->getRefreshToken()
+                ]);
+                $this->saveAccessToken($newAccessToken);
+                $this->helper->clearConfigCache();
+            } catch (IdentityProviderException $e) {
+                //TODO - Notify user there was an error
+                var_dump($e->getMessage());
+                return false;
             }
             return true;
         }

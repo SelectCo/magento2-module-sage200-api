@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace SelectCo\Sage200Api\Model;
 
 use SelectCo\Sage200Api\Helper\Data;
-use SelectCo\Sage200Api\Model\OAuth\Bootstrap;
 use SelectCo\Sage200Api\Model\OAuth\SageToken;
 
 class Connector extends Bootstrap

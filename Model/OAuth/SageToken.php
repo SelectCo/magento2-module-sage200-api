@@ -8,6 +8,7 @@ use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Token\AccessToken;
 use Magento\Framework\Encryption\EncryptorInterface;
 use SelectCo\Sage200Api\Helper\Data;
+use SelectCo\Sage200Api\Model\Bootstrap;
 
 class SageToken extends Bootstrap
 {

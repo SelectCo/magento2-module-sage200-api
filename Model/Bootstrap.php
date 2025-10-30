@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace SelectCo\Sage200Api\Model\OAuth;
+namespace SelectCo\Sage200Api\Model;
 
 use SelectCo\Sage200Api\Helper\Data;
 

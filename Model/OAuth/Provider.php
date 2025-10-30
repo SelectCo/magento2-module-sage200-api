@@ -6,6 +6,7 @@ namespace SelectCo\Sage200Api\Model\OAuth;
 use League\OAuth2\Client\Provider\GenericProvider;
 use Magento\Backend\Model\UrlInterface;
 use SelectCo\Sage200Api\Helper\Data;
+use SelectCo\Sage200Api\Model\Bootstrap;
 
 class Provider extends Bootstrap
 {

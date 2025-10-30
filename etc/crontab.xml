@@ -8,12 +8,16 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
     <group id="selectco">
-        <job name="selectco_sage200_api_refresh_token" instance="SelectCo\Sage200Api\Cron\Token"
+        <job name="selectco_sage200_api_refresh_access_token" instance="SelectCo\Sage200Api\Cron\RefreshAccessToken"
              method="refreshAccessToken">
             <schedule>*/15 * * * *</schedule>
         </job>
-        <job name="selectco_sage200_api_access_token_expiring" instance="SelectCo\Sage200Api\Cron\Token"
+        <job name="selectco_sage200_api_access_token_expiring" instance="SelectCo\Sage200Api\Cron\CheckTokenExpiry"
              method="checkAccessTokenExpiry">
+            <schedule>0 0 * * *</schedule>
+        </job>
+        <job name="selectco_sage200_api_refresh_token_expiring" instance="SelectCo\Sage200Api\Cron\CheckTokenExpiry"
+             method="checkRefreshTokenExpiry">
             <schedule>0 0 * * *</schedule>
         </job>
     </group>

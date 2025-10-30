@@ -12,7 +12,6 @@ class Bootstrap
      */
     const OAUTH_CLIENT_ID = 'selectco_s200_api/api_config/client_id';
     const OAUTH_CLIENT_SECRET = 'selectco_s200_api/api_config/client_secret';
-    const OAUTH_DEVELOPER_SUBSCRIPTION_KEY = 'selectco_s200_api/api_config/developer_subscription_key';
     const OAUTH_X_SITE_ID = 'selectco_s200_api/api_config/x_site_id';
     const SAGE200_X_COMPANY_ID = 'selectco_s200_api/api_config/x_company_id';
     const AUTHORIZATION_SERVER_AUTHORIZE_URL = 'selectco_s200_api/api_config/auth_url';

@@ -36,7 +36,6 @@ class Connector extends Bootstrap
         }
 
         $curlHeaders = array(
-            'ocp-apim-subscription-key: ' . $this->helper->getConfigValue(self::OAUTH_DEVELOPER_SUBSCRIPTION_KEY),
             'Content-Type: application/json',
             'X-Site: ' . $this->helper->getConfigValue(self::OAUTH_X_SITE_ID),
             'Authorization: Bearer ' . $this->sageToken->getToken()

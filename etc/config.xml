@@ -10,7 +10,6 @@
             <api_config>
                 <client_id backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <client_secret backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
-                <developer_subscription_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <x_site_id backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <auth_url>https://id.sage.com/authorize</auth_url>
                 <token_url>https://id.sage.com/oauth/token</token_url>

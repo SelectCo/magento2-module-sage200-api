@@ -22,11 +22,7 @@ class Callback extends Action
      */
     private $token;
 
-    public function __construct(
-            Http $request,
-            SageToken $token,
-            Context $context
-    )
+    public function __construct(Http $request, SageToken $token, Context $context)
     {
         parent::__construct($context);
         $this->request = $request;

@@ -29,7 +29,7 @@ class Provider extends Bootstrap
         return new GenericProvider([
             'clientId'                => $this->helper->getConfigValue(self::OAUTH_CLIENT_ID),
             'clientSecret'            => $this->helper->getConfigValue(self::OAUTH_CLIENT_SECRET),
-            'redirectUri'             => rtrim($this->urlInterface->getUrl(self::CLIENT_REDIRECT_URI),"/"),
+            'redirectUri'             => rtrim($this->urlInterface->getUrl(self::CLIENT_REDIRECT_URI), "/"),
             'urlAuthorize'            => $this->helper->getConfigValue(self::AUTHORIZATION_SERVER_AUTHORIZE_URL),
             'urlAccessToken'          => $this->helper->getConfigValue(self::AUTHORIZATION_SERVER_ACCESS_TOKEN_URL),
             'urlResourceOwnerDetails' => $this->helper->getConfigValue(self::AUTHORIZATION_SERVER_RESOURCE_OWNER_URL),

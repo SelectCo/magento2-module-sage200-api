@@ -90,7 +90,7 @@ class Data extends CoreHelper
      *
      * @return int|null
      */
-    public function getAccessTokenExpirySeconds(): ?int
+    public function getAccessTokenExpiry(): ?int
     {
         return (int)$this->getConfigValue(self::ACCESS_TOKEN_EXPIRY_SECONDS_CONFIG);
     }

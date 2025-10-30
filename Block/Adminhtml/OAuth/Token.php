@@ -7,7 +7,8 @@ use Magento\Backend\Block\Template;
 use Magento\Backend\Model\UrlInterface;
 use SelectCo\Sage200Api\Helper\Data;
 use SelectCo\Sage200Api\Model\Connector;
-use SelectCo\Sage200Api\Model\OAuth\SageToken;
+use SelectCo\Sage200Api\Model\Token\AccessToken;
+use SelectCo\Sage200Api\Model\Token\RefreshToken;
 
 class Token extends Template
 {
@@ -16,9 +17,13 @@ class Token extends Template
      */
     private $helper;
     /**
-     * @var SageToken
+     * @var AccessToken
      */
-    private $sageToken;
+    private $accessToken;
+    /**
+     * @var RefreshToken
+     */
+    private $refreshToken;
     /**
      * @var UrlInterface
      */
@@ -30,16 +35,17 @@ class Token extends Template
 
     public function __construct(
         Data $helper,
-        SageToken $sageToken,
+        AccessToken $accessToken,
+        RefreshToken $refreshToken,
         UrlInterface $urlInterface,
         Template\Context $context,
         Connector $connector,
         array $data = []
-    )
-    {
+    ) {
         parent::__construct($context, $data);
         $this->helper = $helper;
-        $this->sageToken = $sageToken;
+        $this->accessToken = $accessToken;
+        $this->refreshToken = $refreshToken;
         $this->urlInterface = $urlInterface;
         $this->connector = $connector;
     }
@@ -51,7 +57,7 @@ class Token extends Template
 
     public function isTokenSet(): bool
     {
-        if ($this->sageToken->getAccessToken()) {
+        if ($this->accessToken->getAccessToken()) {
             return true;
         }
         return false;
@@ -59,21 +65,19 @@ class Token extends Template
 
     public function getAccessTokenExpiry(): string
     {
-        $token = $this->sageToken->checkAccessTokenExpiry();
-        if ($token) {
-            return 'Token expires in ' . round($token['hoursToExpire'],2) . ' hours at ' . $token['expiryDate'];
+        if (($token = $this->accessToken->checkAccessTokenExpiry())) {
+            return "Token expires in {$token['hoursToExpire']} hours at {$token['expiryDate']}";
         }
         return 'Token has already expired!';
     }
 
     public function getRefreshTokenExpiry(): string
     {
-        $token = $this->sageToken->checkRefreshTokenExpiry();
-        if ($token) {
-            return 'Token expires in ' . round($token['daysToExpire'],1) . ' days at ' . $token['expiryDate'];
-        }
-        if ($this->sageToken->getRefreshToken() === null) {
+        if ($this->refreshToken->getRefreshToken() === null) {
             return 'Refresh token has not been set';
+        }
+        if (($token = $this->refreshToken->checkRefreshTokenExpiry())) {
+            return "Token expires in {$token['daysToExpire']} days at {$token['expiryDate']}";
         }
         return 'Token has already expired!';
     }
@@ -90,13 +94,13 @@ class Token extends Template
 
     public function isTokenExpired(): bool
     {
-        return $this->sageToken->getAccessToken()->hasExpired();
+        return $this->accessToken->getAccessToken()->hasExpired();
     }
 
     public function getAvailableSites(): array
     {
         $results = json_decode($this->connector->send('sites', 'GET'), true);
-        if (array_key_exists('statusCode', $results)) {
+        if ($results === null || array_key_exists('statusCode', $results)) {
             return [];
         }
 

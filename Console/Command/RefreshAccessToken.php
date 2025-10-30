@@ -20,11 +20,13 @@ class RefreshAccessToken extends Command
      */
     private $helper;
 
-    public function __construct(SageToken $sageToken, Data $helper)
-    {
+    public function __construct(
+        SageToken $sageToken,
+        Data $helper
+    ) {
+        parent::__construct();
         $this->sageToken = $sageToken;
         $this->helper = $helper;
-        parent::__construct();
     }
 
     /**
@@ -54,24 +56,10 @@ class RefreshAccessToken extends Command
             return $exitCode;
         }
 
-        if ($this->sageToken->refreshToken()) {
+        if ($this->sageToken->refreshAccessToken()) {
             $output->writeln('<info>Access token was refreshed successfully!</info>');
         } else {
             $output->writeln('<error>Access token could not be refreshed!</error>');
-            $exitCode = 1;
-        }
-
-        if ($result = $this->sageToken->checkAccessTokenExpiry()) {
-            $output->writeln("<info>Access token expires in " . round($result['hoursToExpire'], 2) . " hours, at {$result['expiryDate']} </info>");
-        } else {
-            $output->writeln('<error>Access token has expired!</error>');
-            $exitCode = 1;
-        }
-
-        if ($result = $this->sageToken->checkRefreshTokenExpiry()) {
-            $output->writeln("<info>Refresh token expires in " . round($result['daysToExpire'], 2) . " days, at {$result['expiryDate']} </info>");
-        } else {
-            $output->writeln('<error>Refresh token has expired!</error>');
             $exitCode = 1;
         }
 

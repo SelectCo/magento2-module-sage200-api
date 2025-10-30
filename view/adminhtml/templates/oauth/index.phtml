@@ -14,7 +14,8 @@ if (!$block->isModuleEnabled()) {
         <div class="page-actions-inner" data-title="Sage200 OAuth Token">
             <div class="page-actions-buttons">
                 <button id="refresh" title="Refresh Token" type="button" class="action- scalable action-secondary"
-                        onclick="location.href = '<?= $block->getTokenRefreshUrl(); ?>';" data-ui-id="refreshtoken-button">
+                        onclick="location.href = '<?= $block->getTokenRefreshUrl(); ?>';"
+                        data-ui-id="refreshtoken-button">
                     <span>Refresh Token</span>
                 </button>
                 <button id="get" title="Get New Token" type="button" class="action- scalable primary"
@@ -46,12 +47,16 @@ if (!$block->isModuleEnabled()) {
         <tr>
             <td><strong>Available Companies</strong></td>
         </tr>
-        <?php foreach ($block->getAvailableSites() as $site) { ?>
-            <tr>
-                <td><?= $site['company_id'] ?></td>
-                <td>  </td>
-                <td><?= $site['company_name'] ?></td>
-            </tr>
-        <?php } ?>
+        <?php
+        $sites = $block->getAvailableSites();
+        if (!empty($sites)) {
+            foreach ($block->getAvailableSites() as $site) { ?>
+                <tr>
+                    <td><?= $site['company_id'] ?></td>
+                    <td></td>
+                    <td><?= $site['company_name'] ?></td>
+                </tr>
+            <?php }
+        } ?>
     </table>
 <?php } ?>

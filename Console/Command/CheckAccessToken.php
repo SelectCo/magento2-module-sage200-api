@@ -4,7 +4,8 @@ declare(strict_types=1);
 namespace SelectCo\Sage200Api\Console\Command;
 
 use SelectCo\Sage200Api\Helper\Data;
-use SelectCo\Sage200Api\Model\OAuth\SageToken;
+use SelectCo\Sage200Api\Model\Token\AccessToken;
+use SelectCo\Sage200Api\Model\Token\RefreshToken;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -12,19 +13,27 @@ use Symfony\Component\Console\Output\OutputInterface;
 class CheckAccessToken extends Command
 {
     /**
-     * @var SageToken
+     * @var AccessToken
      */
-    private $sageToken;
+    private $accessToken;
+    /**
+     * @var RefreshToken
+     */
+    private $refreshToken;
     /**
      * @var Data
      */
     private $helper;
 
-    public function __construct(SageToken $sageToken, Data $helper)
-    {
-        $this->sageToken = $sageToken;
-        $this->helper = $helper;
+    public function __construct(
+        AccessToken $accessToken,
+        RefreshToken $refreshToken,
+        Data $helper
+    ) {
         parent::__construct();
+        $this->accessToken = $accessToken;
+        $this->refreshToken = $refreshToken;
+        $this->helper = $helper;
     }
 
     /**
@@ -48,26 +57,27 @@ class CheckAccessToken extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $exitCode = 0;
-
         if (!$this->helper->isModuleEnabled()) {
             $output->writeln('<error>Module is not enabled!</error>');
             return $exitCode;
         }
 
-        $result = $this->sageToken->checkAccessTokenExpiry();
-        if (!$result) {
+        if (($token = $this->accessToken->checkAccessTokenExpiry())) {
+            $output->writeln(
+                "<info>Access token expires in {$token['hoursToExpire']} hours, at {$token['expiryDate']} </info>"
+            );
+        } else {
             $output->writeln('<error>Access token has expired!</error>');
             $exitCode = 1;
-        } else {
-            $output->writeln("<info>Access token expires in " . round($result['hoursToExpire'], 2) . " hours, at {$result['expiryDate']} </info>");
         }
 
-        $result = $this->sageToken->checkRefreshTokenExpiry();
-        if (!$result) {
+        if (($token = $this->refreshToken->checkRefreshTokenExpiry())) {
+            $output->writeln(
+                "<info>Refresh token expires in {$token['daysToExpire']} days, at {$token['expiryDate']} </info>"
+            );
+        } else {
             $output->writeln('<error>Refresh token has expired!</error>');
             $exitCode = 1;
-        } else {
-            $output->writeln("<info>Refresh token expires in " . round($result['daysToExpire'], 2) . " days, at {$result['expiryDate']} </info>");
         }
 
         return $exitCode;

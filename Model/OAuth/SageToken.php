@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace SelectCo\Sage200Api\Model\OAuth;
 
-use InvalidArgumentException;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
-use League\OAuth2\Client\Token\AccessToken;
+use League\OAuth2\Client\Token\AccessToken as SageAccessToken;
 use Magento\Framework\Encryption\EncryptorInterface;
 use SelectCo\Sage200Api\Helper\Data;
 use SelectCo\Sage200Api\Model\Bootstrap;
+use SelectCo\Sage200Api\Model\Token\AccessToken;
 
 class SageToken extends Bootstrap
 {
@@ -16,26 +16,27 @@ class SageToken extends Bootstrap
      * @var Provider
      */
     private $provider;
-
-    /**
-     * @var AccessToken|null
-     */
-    private $token = null;
     /**
      * @var EncryptorInterface
      */
     private $_encryptor;
+    /**
+     * @var AccessToken
+     */
+    private $accessToken;
 
     /**
      * @param Data $data
      * @param Provider $provider
      * @param EncryptorInterface $encryptor
+     * @param AccessToken $accessToken
      */
-    public function __construct(Data $data, Provider $provider, EncryptorInterface $encryptor)
+    public function __construct(Data $data, Provider $provider, EncryptorInterface $encryptor, AccessToken $accessToken)
     {
+        parent::__construct($data);
         $this->provider = $provider;
         $this->_encryptor = $encryptor;
-        parent::__construct($data);
+        $this->accessToken = $accessToken;
     }
 
     /**
@@ -58,71 +59,47 @@ class SageToken extends Bootstrap
                 $this->saveRefreshTokenExpiry($this->helper->getConfigValue(self::OAUTH_REFRESH_TOKEN_LIFETIME));
             }
         } catch (IdentityProviderException $e) {
-            //TODO - ADD LOGGING
-            if ($e->getMessage() === 'invalid_grant') {
-
-            }
-            var_dump($e->getMessage());
+            //TODO - Add logging
         }
         $this->helper->clearConfigCache();
     }
 
     /**
-     * Get saved access token
+     * Refresh access token
      *
-     * @return AccessToken|null
+     * @return bool
      */
-    public function getAccessToken(): ?AccessToken
+    public function refreshAccessToken(): bool
     {
-        if ($this->token) {
-            return $this->token;
-        }
-        $accessToken = $this->helper->getConfigValue(self::OAUTH_ACCESS_TOKEN);
+        if ($this->accessToken->getAccessToken() && $this->accessToken->getAccessToken()->getRefreshToken() !== null) {
+            $provider = $this->provider->getProvider();
 
-        if ($accessToken) {
             try {
-                $this->token = new AccessToken(json_decode($accessToken, true));
-
-            } catch (InvalidArgumentException $e) {
-
+                $newAccessToken = $provider->getAccessToken('refresh_token', [
+                    'refresh_token' => $this->accessToken->getAccessToken()->getRefreshToken()
+                ]);
+                $this->saveAccessToken($newAccessToken);
+                $this->helper->clearConfigCache();
+            } catch (IdentityProviderException $e) {
+                return false;
             }
+            return true;
         }
-        return $this->token;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getToken(): ?string
-    {
-        if ($this->getAccessToken()) {
-            return $this->getAccessToken()->getToken();
-        }
-        return null;
-    }
-
-    /**
-     * Get saved access token
-     *
-     * @return string|null
-     */
-    public function getRefreshToken(): ?string
-    {
-        if ($this->getAccessToken()) {
-            return $this->getAccessToken()->getRefreshToken();
-        }
-        return null;
+        return false;
     }
 
     /**
      * Save access token
      *
-     * @param AccessToken $token
+     * @param SageAccessToken $token
      * @return void
      */
-    public function saveAccessToken(AccessToken $token): void
+    public function saveAccessToken(SageAccessToken $token): void
     {
-        $this->helper->setConfigValue(self::OAUTH_ACCESS_TOKEN, $this->_encryptor->encrypt(json_encode($token->jsonSerialize())));
+        $this->helper->setConfigValue(
+            self::OAUTH_ACCESS_TOKEN,
+            $this->_encryptor->encrypt(json_encode($token->jsonSerialize()))
+        );
     }
 
     /**
@@ -134,69 +111,5 @@ class SageToken extends Bootstrap
     public function saveRefreshTokenExpiry($expiry): void
     {
         $this->helper->setConfigValue(self::OAUTH_REFRESH_TOKEN_EXPIRY, time() + ((int)$expiry * 24 * 60 * 60));
-    }
-
-    /**
-     * Refresh access token
-     *
-     * @return bool
-     */
-    public function refreshToken(): bool
-    {
-        if ($this->getAccessToken() && $this->getRefreshToken() !== null) {
-            $provider = $this->provider->getProvider();
-
-            try {
-                $newAccessToken = $provider->getAccessToken('refresh_token', [
-                    'refresh_token' => $this->getRefreshToken()
-                ]);
-                $this->saveAccessToken($newAccessToken);
-                $this->helper->clearConfigCache();
-            } catch (IdentityProviderException $e) {
-                //TODO - Notify user there was an error
-                var_dump($e->getMessage());
-                return false;
-            }
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Check API token expiry
-     *
-     * @return array|bool
-     */
-    public function checkAccessTokenExpiry()
-    {
-        if (!$this->getAccessToken() || $this->getAccessToken()->hasExpired()) {
-            return false;
-        }
-
-        return [
-            'minutesToExpire' => ($this->getAccessToken()->getExpires() - time()) / 60,
-            'hoursToExpire' => ($this->getAccessToken()->getExpires() - time()) / 60 / 60,
-            'expiryDate' => date('d/m/Y H:i:s', $this->getAccessToken()->getExpires())
-        ];
-    }
-
-    /**
-     * Check API refresh token expiry
-     *
-     * @return array|bool
-     */
-    public function checkRefreshTokenExpiry()
-    {
-        $tokenExpiry = $this->helper->getConfigValue(self::OAUTH_REFRESH_TOKEN_EXPIRY);
-        if ($this->getRefreshToken() === null || (int)$tokenExpiry < time()) {
-            return false;
-        }
-
-        return [
-            'minutesToExpire' => ((int)$tokenExpiry - time()) / 60,
-            'hoursToExpire' => ((int)$tokenExpiry - time()) / 60 / 60,
-            'daysToExpire' => ((int)$tokenExpiry - time()) / 60 / 60 / 24,
-            'expiryDate' => date('d/m/Y H:i:s', (int)$tokenExpiry)
-        ];
     }
 }

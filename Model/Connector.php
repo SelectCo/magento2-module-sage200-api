@@ -5,6 +5,7 @@ namespace SelectCo\Sage200Api\Model;
 
 use SelectCo\Sage200Api\Helper\Data;
 use SelectCo\Sage200Api\Model\OAuth\SageToken;
+use SelectCo\Sage200Api\Model\Token\AccessToken;
 
 class Connector extends Bootstrap
 {
@@ -12,11 +13,16 @@ class Connector extends Bootstrap
      * @var SageToken
      */
     private $sageToken;
+    /**
+     * @var AccessToken
+     */
+    private $accessToken;
 
-    public function __construct(SageToken $sageToken, Data $data)
+    public function __construct(Data $data, SageToken $sageToken, AccessToken $accessToken)
     {
         parent::__construct($data);
         $this->sageToken = $sageToken;
+        $this->accessToken = $accessToken;
     }
 
     /**
@@ -26,18 +32,21 @@ class Connector extends Bootstrap
      * @param string|null $sage200xCompany
      * @return string|null
      */
-    public function send(string $endpoint, string $method, ?string $queryParam = null, ?string $sage200xCompany = null): ?string
-    {
+    public function send(
+        string $endpoint,
+        string $method,
+        ?string $queryParam = null,
+        ?string $sage200xCompany = null
+    ): ?string {
         $methods = ['POST', 'GET', 'DEL', 'PUT', 'PATCH', 'DELETE'];
-        if (!$this->helper->isModuleEnabled() || !$this->checkStatus() || !in_array($method, $methods))
-        {
+        if (!$this->helper->isModuleEnabled() || !$this->checkStatus() || !in_array($method, $methods)) {
             return null;
         }
 
         $curlHeaders = array(
             'Content-Type: application/json',
             'X-Site: ' . $this->helper->getConfigValue(self::OAUTH_X_SITE_ID),
-            'Authorization: Bearer ' . $this->sageToken->getToken()
+            'Authorization: Bearer ' . $this->accessToken->getToken()
         );
 
         if ($sage200xCompany !== null) {
@@ -51,7 +60,7 @@ class Connector extends Bootstrap
         }
 
         $curl = curl_init();
-        curl_setopt_array($curl, array(
+        curl_setopt_array($curl, [
             CURLOPT_URL => str_replace(' ', '%20', $this->helper->getBaseUrl() . $endpoint),
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
@@ -61,11 +70,10 @@ class Connector extends Bootstrap
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => $method,
             CURLOPT_HTTPHEADER => $curlHeaders,
-        ));
-
+        ]);
         $response = curl_exec($curl);
 
-        curl_close($curl);
+        $curl = null;
 
         return $response;
     }
@@ -75,7 +83,7 @@ class Connector extends Bootstrap
      */
     public function checkStatus(): bool
     {
-        if (!$this->sageToken->checkAccessTokenExpiry() && !$this->sageToken->refreshToken()) {
+        if (!$this->accessToken->checkAccessTokenExpiry() && !$this->sageToken->refreshToken()) {
             return false;
         }
         return true;

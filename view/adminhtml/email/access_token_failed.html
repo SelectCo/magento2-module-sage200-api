@@ -6,6 +6,9 @@
     <p>
         {{trans 'There was an issue while trying to obtain an access token or the refresh token has expired.'}}
     </p>
+    <p>
+        {{trans "Please login to your admin panel for domain %store_name to resolve." store_name="$this.getUrl($store)"}}
+    </p>
 
     {{if error.message}}
     <p>

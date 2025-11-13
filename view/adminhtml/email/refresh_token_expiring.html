@@ -4,6 +4,9 @@
 } @-->
 <body>
     <p>
-        {{trans 'The access token will be expiring soon.  Please log in to your admin panel and submit a new token request.'}}
+        {{trans 'The access token will be expiring soon.'}}
+    </p>
+    <p>
+        {{trans "Please login to your admin panel for domain %store_name and submit a new token request." store_name="$this.getUrl($store)"}}
     </p>
 </body>

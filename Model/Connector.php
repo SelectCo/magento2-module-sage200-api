@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace SelectCo\Sage200Api\Model;
 
+use RuntimeException;
 use SelectCo\Sage200Api\Helper\Data;
 use SelectCo\Sage200Api\Model\OAuth\SageToken;
 use SelectCo\Sage200Api\Model\Token\AccessToken;
@@ -87,5 +88,28 @@ class Connector extends Bootstrap
             return false;
         }
         return true;
+    }
+
+    /**
+     * Retrieves a new instance of the Resource object.
+     * Throws an exception if the EndPoints class does not exist.
+     *
+     * @return \SelectCo\Sage200ApiEndPoints\Resource|null
+     * @throws RuntimeException
+     */
+    public function getResources(): ?\SelectCo\Sage200ApiEndPoints\Resource
+    {
+        if (!$this->helper->isModuleEnabled() || !$this->checkStatus()) {
+            return null;
+        }
+
+        if (class_exists(\SelectCo\Sage200ApiEndPoints\Resource::class)) {
+            $connector = new \SelectCo\Sage200ApiClient\Sage200Connector($this->accessToken->getToken());
+            $connector->setSite($this->helper->getConfigValue(self::OAUTH_X_SITE_ID));
+            $connector->setCompany($this->helper->getConfigValue(self::SAGE200_X_COMPANY_ID));
+
+            return new \SelectCo\Sage200ApiEndPoints\Resource($connector);
+        }
+        throw new RuntimeException('Sage200ApiEndPoints not installed');
     }
 }

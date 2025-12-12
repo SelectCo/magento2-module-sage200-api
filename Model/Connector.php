@@ -84,7 +84,7 @@ class Connector extends Bootstrap
      */
     public function checkStatus(): bool
     {
-        if (!$this->accessToken->checkAccessTokenExpiry() && !$this->sageToken->refreshToken()) {
+        if (!$this->accessToken->checkAccessTokenExpiry() && !$this->sageToken->refreshAccessToken()) {
             return false;
         }
         return true;
